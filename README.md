@@ -4,4 +4,8 @@
 
 **Based off of [this](http://redux.js.org/docs/advanced/ExampleRedditAPI.html) tutorial**
 
+#### Run
+- `npm install`
+- `npm start`
+
 
