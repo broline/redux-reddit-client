@@ -81,7 +81,8 @@ AsyncApp.propTypes = {
 }
 
 function mapStateToProps(state) {
-  const { selectedSubreddit, postsBySubreddit } = state
+  const { selectedSubreddit } = state;
+  const postsBySubreddit = state.postsBySubreddit.toJS();
   const {
     isFetching,
     lastUpdated,

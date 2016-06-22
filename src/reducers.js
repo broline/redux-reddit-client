@@ -1,8 +1,9 @@
-import { combineReducers } from 'redux'
+import { combineReducers } from 'redux';
+import { Map } from 'immutable';
 import {
   SELECT_SUBREDDIT, INVALIDATE_SUBREDDIT,
   REQUEST_POSTS, RECEIVE_POSTS
-} from './actions'
+} from './actions';
 
 function selectedSubreddit(state = 'reactjs', action) {
   switch (action.type) {
@@ -13,23 +14,21 @@ function selectedSubreddit(state = 'reactjs', action) {
   }
 }
 
-function posts(state = {
+function posts(state = Map({
   isFetching: false,
   didInvalidate: false,
   items: []
-}, action) {
+}), action) {
   switch (action.type) {
     case INVALIDATE_SUBREDDIT:
-      return Object.assign({}, state, {
-        didInvalidate: true
-      })
+      return state.set("didInvalidate", true);
     case REQUEST_POSTS:
-      return Object.assign({}, state, {
+      return state.merge({
         isFetching: true,
         didInvalidate: false
-      })
+      });
     case RECEIVE_POSTS:
-      return Object.assign({}, state, {
+      return state.merge({
         isFetching: false,
         didInvalidate: false,
         items: action.posts,
@@ -40,14 +39,12 @@ function posts(state = {
   }
 }
 
-function postsBySubreddit(state = { }, action) {
+function postsBySubreddit(state = Map(), action) {
   switch (action.type) {
     case INVALIDATE_SUBREDDIT:
     case RECEIVE_POSTS:
     case REQUEST_POSTS:
-      return Object.assign({}, state, {
-        [action.subreddit]: posts(state[action.subreddit], action)
-      })
+      return state.set(action.subreddit, posts(state[action.subreddit], action))
     default:
       return state
   }
